@@ -13,5 +13,5 @@ mkdir -p ${ROOT_DIR}/${YYYYMM}
 
 echo `date`: Start sciprts > ${LOG_FILE}
 curl -H "Content-Type: application/json" -d "{\"username\": \"${MISSKEY_USERNAME}\" }" https://misskey.dev/api/users/followers -o ${FILE}
-echo "`date`: Save followers jsonfile: ${FILE}" > ${LOG_FILE}
-echo `date`: End sciprts > ${LOG_FILE}
+echo "`date`: Save followers jsonfile: ${FILE}" >> ${LOG_FILE}
+echo `date`: End sciprts >> ${LOG_FILE}
