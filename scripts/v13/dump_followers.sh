@@ -15,6 +15,6 @@ mkdir -p ${ROOT_DIR}/${YYYYMM}
 URL="https://${ADDRESS}/api/users/followers"
 
 echo "`date`: Start sciprts" > ${LOG_FILE}
-curl -H "Content-Type: application/json" -d "{\"username\": \"${USERNAME}\" }" ${URL} -o ${FILE}
+curl -H "Content-Type: application/json" -d "{\"userId\": \"${USERID}\" }" ${URL} -o ${FILE}
 echo "`date`: Save followers jsonfile: ${FILE}" >> ${LOG_FILE}
 echo "`date`: End sciprts" >> ${LOG_FILE}
