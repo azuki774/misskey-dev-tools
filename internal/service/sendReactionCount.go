@@ -16,6 +16,11 @@ type sendReactionCountService struct {
 	Num  int // Fetch note number
 }
 
+func NewSendReactionCountService(Repo ISendReactionRepository) *sendReactionCountService {
+	const num = 100
+	return &sendReactionCountService{Num: num, Repo: Repo}
+}
+
 // countMyReactions: リアクション名 -> 個数 の mapping を作成
 func countMyReactions(nrs []model.NoteReaction) (countf map[string]int, err error) {
 	countf = make(map[string]int)

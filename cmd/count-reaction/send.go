@@ -1,6 +1,9 @@
 package main
 
 import (
+	"azuk774/misskey-dev-tools/internal/repository"
+	"azuk774/misskey-dev-tools/internal/service"
+	"context"
 	"fmt"
 	"log/slog"
 	"os"
@@ -42,5 +45,8 @@ func startSend() error {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logger)
 	slog.Info("Info message")
-	return nil
+	mc := repository.NewMClient()
+	svc := service.NewSendReactionCountService(mc)
+	ctx := context.Background()
+	return svc.Run(ctx)
 }
