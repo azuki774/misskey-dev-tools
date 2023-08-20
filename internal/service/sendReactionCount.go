@@ -39,7 +39,6 @@ func pickReactionsFromCountf(countf map[string]int, pickNum int) (nrsc []model.N
 	for reactionName, num := range countf {
 		nrsc = append(nrsc, model.NoteReactionSlice{ReactionName: reactionName, Count: num})
 	}
-
 	// Count が大きい順にソート
 	sort.Slice(nrsc, func(i, j int) bool {
 		return nrsc[i].Count >= nrsc[j].Count
@@ -67,12 +66,18 @@ func (s *sendReactionCountService) Run(ctx context.Context) (err error) {
 	}
 	slog.Info("count recent my reactions")
 
-	_, err = pickReactionsFromCountf(countf, s.ReactionkindNum)
+	nrsc, err := pickReactionsFromCountf(countf, s.ReactionkindNum)
 	if err != nil {
 		slog.Error("failed to pick my reactions", "error", err)
 		return err
 	}
 	slog.Info("pick my reactions", "pick_kind_category", s.ReactionkindNum)
+	err = s.Repo.PostNote(ctx, model.NoteCountGetText(nrsc))
+	if err != nil {
+		slog.Error("failed to post the note", "error", err)
+		return err
+	}
 
+	slog.Info("succeed in posting to misskey")
 	return nil
 }

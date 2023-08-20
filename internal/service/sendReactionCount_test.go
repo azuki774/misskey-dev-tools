@@ -4,10 +4,16 @@ import (
 	"azuk774/misskey-dev-tools/internal/model"
 	"context"
 	"fmt"
+	"log/slog"
+	"os"
 	"reflect"
 	"testing"
 )
 
+func init() {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
+}
 func Test_countMyReactions(t *testing.T) {
 	// create test
 	t1 := model.NoteReaction{}

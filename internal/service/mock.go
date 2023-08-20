@@ -19,7 +19,7 @@ func (m *mockSendReactionRepository) GetRecentReactions(ctx context.Context, num
 
 	t3 := model.NoteReaction{}
 	t3.Note.MyReaction = ":test_reactionC@.:"
-	return []model.NoteReaction{}, m.ErrGetRecentReactions
+	return []model.NoteReaction{t1, t2, t3}, m.ErrGetRecentReactions
 }
 
 func (m *mockSendReactionRepository) PostNote(ctx context.Context, text string) (err error) {
