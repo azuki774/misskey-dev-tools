@@ -52,3 +52,92 @@ func Test_countMyReactions(t *testing.T) {
 		})
 	}
 }
+
+func Test_pickReactionsFromCountf(t *testing.T) {
+	type args struct {
+		countf  map[string]int
+		pickNum int
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantNrsc []model.NoteReactionSlice
+		wantErr  bool
+	}{
+		{
+			name: "ok #1",
+			args: args{
+				countf:  map[string]int{":test_reactionA@.:": 1, ":test_reactionB@.:": 2, ":test_reactionC@.:": 3},
+				pickNum: 2,
+			},
+			wantNrsc: []model.NoteReactionSlice{
+				{
+					ReactionName: ":test_reactionC@.:",
+					Count:        3,
+				},
+				{
+					ReactionName: ":test_reactionB@.:",
+					Count:        2,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "ok #2",
+			args: args{
+				countf:  map[string]int{":test_reactionA@.:": 1, ":test_reactionB@.:": 2, ":test_reactionC@.:": 3},
+				pickNum: 1,
+			},
+			wantNrsc: []model.NoteReactionSlice{
+				{
+					ReactionName: ":test_reactionC@.:",
+					Count:        3,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "ok #3 (not sufficient)",
+			args: args{
+				countf:  map[string]int{":test_reactionA@.:": 1, ":test_reactionB@.:": 2, ":test_reactionC@.:": 3},
+				pickNum: 10,
+			},
+			wantNrsc: []model.NoteReactionSlice{
+				{
+					ReactionName: ":test_reactionC@.:",
+					Count:        3,
+				},
+				{
+					ReactionName: ":test_reactionB@.:",
+					Count:        2,
+				},
+				{
+					ReactionName: ":test_reactionA@.:",
+					Count:        1,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "none",
+			args: args{
+				countf:  map[string]int{},
+				pickNum: 1,
+			},
+			wantNrsc: nil,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotNrsc, err := pickReactionsFromCountf(tt.args.countf, tt.args.pickNum)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("pickReactionsFromCountf() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotNrsc, tt.wantNrsc) {
+				t.Errorf("pickReactionsFromCountf() = %v, want %v", gotNrsc, tt.wantNrsc)
+			}
+		})
+	}
+}
