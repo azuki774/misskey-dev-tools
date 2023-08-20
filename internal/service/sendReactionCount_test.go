@@ -2,6 +2,8 @@ package service
 
 import (
 	"azuk774/misskey-dev-tools/internal/model"
+	"context"
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -137,6 +139,60 @@ func Test_pickReactionsFromCountf(t *testing.T) {
 			}
 			if !reflect.DeepEqual(gotNrsc, tt.wantNrsc) {
 				t.Errorf("pickReactionsFromCountf() = %v, want %v", gotNrsc, tt.wantNrsc)
+			}
+		})
+	}
+}
+
+func Test_sendReactionCountService_Run(t *testing.T) {
+	type fields struct {
+		Repo            ISendReactionRepository
+		FetchNoteNum    int
+		ReactionkindNum int
+	}
+	type args struct {
+		ctx context.Context
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "ok",
+			fields: fields{
+				Repo:            &mockSendReactionRepository{},
+				FetchNoteNum:    100,
+				ReactionkindNum: 5,
+			},
+			args: args{
+				ctx: context.Background(),
+			},
+			wantErr: false,
+		},
+		{
+			name: "fetch error",
+			fields: fields{
+				Repo:            &mockSendReactionRepository{ErrGetRecentReactions: fmt.Errorf("error text")},
+				FetchNoteNum:    100,
+				ReactionkindNum: 5,
+			},
+			args: args{
+				ctx: context.Background(),
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &sendReactionCountService{
+				Repo:            tt.fields.Repo,
+				FetchNoteNum:    tt.fields.FetchNoteNum,
+				ReactionkindNum: tt.fields.ReactionkindNum,
+			}
+			if err := s.Run(tt.args.ctx); (err != nil) != tt.wantErr {
+				t.Errorf("sendReactionCountService.Run() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

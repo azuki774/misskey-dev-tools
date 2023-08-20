@@ -55,21 +55,21 @@ func (s *sendReactionCountService) Run(ctx context.Context) (err error) {
 	slog.Info("sendReactionCount start")
 	nrs, err := s.Repo.GetRecentReactions(ctx, s.FetchNoteNum)
 	if err != nil {
-		slog.Error("failed to get recent reactions", err)
+		slog.Error("failed to get recent reactions", "error", err)
 		return err
 	}
 	slog.Info("fetch recent my reactions", "fetch_reactions_num", s.FetchNoteNum)
 
 	countf, err := countMyReactions(nrs)
 	if err != nil {
-		slog.Error("failed to count my reactions", err)
+		slog.Error("failed to count my reactions", "error", err)
 		return err
 	}
 	slog.Info("count recent my reactions")
 
 	_, err = pickReactionsFromCountf(countf, s.ReactionkindNum)
 	if err != nil {
-		slog.Error("failed to pick my reactions", err)
+		slog.Error("failed to pick my reactions", "error", err)
 		return err
 	}
 	slog.Info("pick my reactions", "pick_kind_category", s.ReactionkindNum)
