@@ -71,7 +71,8 @@ func (s *sendReactionCountService) Run(ctx context.Context) (err error) {
 		slog.Error("failed to pick my reactions", "error", err)
 		return err
 	}
-	slog.Info("pick my reactions", "pick_kind_category", s.ReactionkindNum)
+
+	slog.Info("pick my reactions", "pick_kind_category", s.ReactionkindNum, "text", model.NoteCountGetText(nrsc))
 	err = s.Repo.PostNote(ctx, model.NoteCountGetText(nrsc))
 	if err != nil {
 		slog.Error("failed to post the note", "error", err)

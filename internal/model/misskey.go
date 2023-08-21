@@ -64,3 +64,9 @@ type NoteReaction struct {
 		MyReaction string `json:"myReaction,omitempty"`
 	} `json:"note,omitempty"`
 }
+
+type ReactionsReq struct {
+	UserID string `json:"userId"`
+	Limit  int    `json:"limit"`
+	I      string `json:"i"`
+}
