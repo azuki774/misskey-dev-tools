@@ -16,8 +16,8 @@ jobs:
         with:
           go-version: 1.21
 
-      - name: make bin-linux-amd64
-        run: make bin-linux-amd64
+      - name: make bin
+        run: make bin
 
       - name: prepare artifacts
         run: cd build/bin && tar -cvzf count-reaction.tar.gz count-reaction
