@@ -70,3 +70,8 @@ type ReactionsReq struct {
 	Limit  int    `json:"limit"`
 	I      string `json:"i"`
 }
+
+type PostNoteReq struct {
+	Text string `json:"text"`
+	I    string `json:"i"`
+}

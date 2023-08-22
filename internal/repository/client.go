@@ -57,6 +57,27 @@ func (c *MClient) GetRecentReactions(ctx context.Context, num int) (nrs []model.
 }
 
 func (c *MClient) PostNote(ctx context.Context, text string) (err error) {
-	// TODO
+	endpoint := "https://" + c.Domain + "/api/notes/create"
+	reqData := model.PostNoteReq{
+		Text: text,
+		I:    c.I,
+	}
+
+	reqJson, err := json.Marshal(reqData)
+	if err != nil {
+		return err
+	}
+
+	res, err := http.Post(endpoint, "application/json", bytes.NewBuffer(reqJson))
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+
+	_, err = io.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
