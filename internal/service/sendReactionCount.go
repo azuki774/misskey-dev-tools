@@ -3,6 +3,7 @@ package service
 import (
 	"azuk774/misskey-dev-tools/internal/model"
 	"context"
+	"fmt"
 	"log/slog"
 	"sort"
 )
@@ -71,8 +72,11 @@ func (s *sendReactionCountService) Run(ctx context.Context) (err error) {
 		slog.Error("failed to pick my reactions", "error", err)
 		return err
 	}
-	slog.Info("pick my reactions", "pick_kind_category", s.ReactionkindNum)
-	err = s.Repo.PostNote(ctx, model.NoteCountGetText(nrsc))
+
+	slog.Info("pick my reactions", "pick_kind_category", s.ReactionkindNum, "text", model.NoteCountGetText(nrsc))
+
+	wholeText := "最近よく使うリアクションランキング\n" + model.NoteCountGetText(nrsc) + fmt.Sprintf("（過去 %d 回のリアクションから）", len(nrs))
+	err = s.Repo.PostNote(ctx, wholeText)
 	if err != nil {
 		slog.Error("failed to post the note", "error", err)
 		return err
