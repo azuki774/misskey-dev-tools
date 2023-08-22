@@ -4,7 +4,7 @@
 ### count-reaction send
 - 過去100回のリアクションからトップ5に使われたリアクションをまとめてノートします
     ```
-    USERID="********" I="************" DOMAIN="misskey.io" build/bin/count-reaction send
+    USERID="********" I="************" DOMAIN="misskey.io" ./count-reaction send
     ```
 
     - 出てくるノート
